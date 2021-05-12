@@ -39,9 +39,8 @@
 
   create {% if temporary: -%}temporary{%- endif %} table
     {{ relation.include(database=False) }}
-  as (
+  as
     {{ sql }}
-  )
 {% endmacro %}
 
 {% macro mysql__current_timestamp() -%}
