@@ -54,7 +54,7 @@
     2. Rename the new relation to existing relation
   #}
   {% call statement('drop_relation') %}
-    drop {{ to_relation.type }} if exists {{ to_relation }} cascade
+    drop {{ to_relation.type }} if exists {{ to_relation }}
   {% endcall %}
   {% call statement('rename_relation') %}
     rename table {{ from_relation }} to {{ to_relation }}
