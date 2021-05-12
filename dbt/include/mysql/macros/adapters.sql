@@ -57,7 +57,7 @@
     drop {{ to_relation.type }} if exists {{ to_relation }}
   {% endcall %}
   {% call statement('rename_relation') %}
-    rename table {{ from_relation }} to {{ to_relation }}
+    alter table {{ from_relation }} rename to {{ to_relation }}
   {% endcall %}
 {% endmacro %}
 
