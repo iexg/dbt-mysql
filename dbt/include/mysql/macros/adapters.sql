@@ -71,7 +71,7 @@
     {% call statement('get_view_definition', fetch_result=True) %}
       select view_definition
       from information_schema.views
-      where table_schema = '{{ from_relation.schema }}' and table_name = '{{ from_relation }}'
+      where table_schema = '{{ from_relation.schema }}' and table_name = '{{ from_relation.identifier }}'
     {% endcall %}
 
     {% set view_def = load_result('get_view_definition').data[0] %}
