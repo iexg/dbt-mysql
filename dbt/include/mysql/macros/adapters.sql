@@ -48,17 +48,43 @@
 {%- endmacro %}
 
 {% macro mysql__rename_relation(from_relation, to_relation) -%}
-  {#
-    MySQL rename fails when the relation already exists, so a 2-step process is needed:
+  {# /*
+    Singlestore rename fails when the relation already exists.
+    Also, it does not support view renames, so a multi-step process is needed:
     1. Drop the existing relation
-    2. Rename the new relation to existing relation
+    2a. If table: rename the new table to existing table name
+    2b. If view: create view with existing view name
+    */
   #}
+  {% call statement('begin_txn') %}
+    begin
+  {% endcall %}
+
   {% call statement('drop_relation') %}
     drop {{ to_relation.type }} if exists {{ to_relation }}
   {% endcall %}
-  {% call statement('rename_relation') %}
-    alter table {{ from_relation }} rename to {{ to_relation }}
+  {% if from_relation.type == 'table' %}
+    {% call statement('rename_table') %}
+      alter table {{ from_relation }} rename to {{ to_relation }}
+    {% endcall %}
+  {% elif from_relation.type == 'view' %}
+    {% call statement('get_view_definition', fetch_result=True) %}
+      select view_definition
+      from information_schema.views
+      where table_schema = '{{ from_relation.schema }}' and table_name = '{{ from_relation }}'
+    {% endcall %}
+
+    {% set view_def = load_result('get_view_definition').data[0][0] %}
+    {% call statement('create_view_from_def') %}
+      create view {{ to_relation }} as 
+      {{ view_def }}
+    {% endcall %}
+
+  {% endif %}
+  {% call statement('end_txn') %}
+    commit
   {% endcall %}
+
 {% endmacro %}
 
 {% macro mysql__check_schema_exists(database, schema) -%}
