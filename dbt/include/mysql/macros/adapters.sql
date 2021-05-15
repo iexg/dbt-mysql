@@ -74,7 +74,7 @@
       where table_schema = '{{ from_relation.schema }}' and table_name = '{{ from_relation }}'
     {% endcall %}
 
-    {% set view_def = load_result('get_view_definition').data[0][0] %}
+    {% set view_def = load_result('get_view_definition').data[0] %}
     {% call statement('create_view_from_def') %}
       create view {{ to_relation }} as 
       {{ view_def }}
