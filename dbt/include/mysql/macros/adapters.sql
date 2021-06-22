@@ -56,10 +56,6 @@
     2b. If view: create view with existing view name
     */
   #}
-  {% call statement('begin_txn') %}
-    begin
-  {% endcall %}
-
   {% call statement('drop_relation') %}
     drop {{ to_relation.type }} if exists {{ to_relation }}
   {% endcall %}
@@ -81,9 +77,6 @@
     {% endcall %}
 
   {% endif %}
-  {% call statement('end_txn') %}
-    commit
-  {% endcall %}
 
 {% endmacro %}
 

@@ -53,7 +53,7 @@ setup(
         ],
     },
     install_requires=[
-        "dbt-core==0.19.0rc1",
+        "dbt-core==0.19.0",
         "mysql-connector-python~=8.0.22",
     ],
     classifiers=[
