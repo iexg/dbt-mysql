@@ -17,7 +17,7 @@ with open(os.path.join(this_directory, 'README.md')) as f:
 
 
 package_name = "dbt-mysql"
-package_version = "0.19.0rc1"
+package_version = "1.0.0"
 description = """The MySQL adapter plugin for dbt (data build tool)"""
 
 
@@ -37,6 +37,8 @@ setup(
         'dbt.include.mysql',
         'dbt.adapters.mysql5',
         'dbt.include.mysql5',
+        'dbt.adapters.singlestore',
+        'dbt.include.singlestore'
     ],
     package_data={
         'dbt.include.mysql': [
@@ -51,9 +53,15 @@ setup(
             'dbt_project.yml',
             'sample_profiles.yml',
         ],
+        'dbt.include.singlestore': [
+            'macros/*.sql',
+            'macros/materializations/**/*.sql',
+            'dbt_project.yml',
+            'sample_profiles.yml',
+        ]
     },
     install_requires=[
-        "dbt-core==0.19.0rc1",
+        "dbt-core>=1.0.0",
         "mysql-connector-python~=8.0.22",
     ],
     classifiers=[
